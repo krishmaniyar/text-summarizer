@@ -1,7 +1,9 @@
 transformers
 transformers[sentencepiece]
+python-box
 datasets
 sacrebleu 
+ensure
 rouge_score 
 py7zr
 pandas
