@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-powered text summarizer that generates concise summaries from your text">
+    <meta name="keywords" content="text summarizer, AI, natural language processing, NLP">
+    <meta name="author" content="Text Summarizer">
+    <title>AI Text Summarizer - Intelligent Text Summarization</title>
+    <link rel="stylesheet" href="/static/style.css?v=2.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-wrapper">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <span class="logo-icon">🧠</span>
+                    <span class="logo-text">AI Text Summarizer</span>
+                </h1>
+                <p class="tagline">Transform lengthy text into concise, meaningful summaries</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="container">
+                <section class="input-section">
+                    <form method="post" action="/predict" id="summarize-form" class="summarize-form">
+                        <div class="form-group">
+                            <label for="text-input" class="form-label">Enter your text to summarize</label>
+                            <textarea 
+                                id="text-input"
+                                name="text" 
+                                class="text-input"
+                                placeholder="Paste or type your text here. The longer the text, the more comprehensive the summary will be..."
+                                required
+                                rows="12"
+                                aria-label="Text input for summarization"
+                            >{{ original if original else "" }}</textarea>
+                            <div class="input-footer">
+                                <span class="char-count" id="char-count">0 characters</span>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="submit-button" id="submit-btn" aria-label="Generate summary">
+                            <span class="button-text">Generate Summary</span>
+                            <span class="button-loader" id="button-loader" aria-hidden="true"></span>
+                        </button>
+                    </form>
+                </section>
+
+                {% if summary %}
+                <section class="result-section" id="result-section">
+                    <div class="result-card">
+                        <div class="result-header">
+                            <h2 class="result-title">
+                                <span class="result-icon">✨</span>
+                                Generated Summary
+                            </h2>
+                            <button class="copy-button" id="copy-btn" aria-label="Copy summary to clipboard" title="Copy to clipboard">
+                                <span class="copy-icon">📋</span>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <div class="result-content">
+                            <div class="summary-text" id="summary-text">{{ summary|replace('\n', '<br>')|safe }}</div>
+                        </div>
+                        <div class="result-footer">
+                            <span class="summary-stats">
+                                <span class="stat-item">
+                                    <strong>Original:</strong> {{ original|length if original else 0 }} characters
+                                </span>
+                                <span class="stat-divider">•</span>
+                                <span class="stat-item">
+                                    <strong>Summary:</strong> {{ summary|length }} characters
+                                </span>
+                                <span class="stat-divider">•</span>
+                                <span class="stat-item">
+                                    <strong>Reduction:</strong> {{ ((1 - (summary|length / original|length)) * 100)|round(1) if original and original|length > 0 else 0 }}%
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
+
+                {% if error %}
+                <section class="error-section" id="error-section">
+                    <div class="error-card">
+                        <div class="error-icon">⚠️</div>
+                        <h3 class="error-title">Error</h3>
+                        <p class="error-message">{{ error }}</p>
+                    </div>
+                </section>
+                {% endif %}
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <p class="footer-text">Powered by advanced AI models for intelligent text summarization</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Character counter
+        const textInput = document.getElementById('text-input');
+        const charCount = document.getElementById('char-count');
+        
+        if (textInput && charCount) {
+            function updateCharCount() {
+                const count = textInput.value.length;
+                charCount.textContent = `${count.toLocaleString()} character${count !== 1 ? 's' : ''}`;
+            }
+            
+            textInput.addEventListener('input', updateCharCount);
+            updateCharCount();
+        }
+
+        // Form submission loading state
+        const form = document.getElementById('summarize-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const buttonLoader = document.getElementById('button-loader');
+        
+        if (form && submitBtn && buttonLoader) {
+            form.addEventListener('submit', function() {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('loading');
+                buttonLoader.style.display = 'inline-block';
+            });
+        }
+
+        // Copy to clipboard functionality
+        const copyBtn = document.getElementById('copy-btn');
+        const summaryText = document.getElementById('summary-text');
+        
+        if (copyBtn && summaryText) {
+            copyBtn.addEventListener('click', async function() {
+                const text = summaryText.textContent;
+                try {
+                    await navigator.clipboard.writeText(text);
+                    const originalText = copyBtn.querySelector('.copy-text').textContent;
+                    copyBtn.querySelector('.copy-text').textContent = 'Copied!';
+                    copyBtn.classList.add('copied');
+                    
+                    setTimeout(() => {
+                        copyBtn.querySelector('.copy-text').textContent = originalText;
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy:', err);
+                }
+            });
+        }
+
+        // Smooth scroll to result
+        const resultSection = document.getElementById('result-section');
+        if (resultSection) {
+            setTimeout(() => {
+                resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+    </script>
+</body>
+</html>

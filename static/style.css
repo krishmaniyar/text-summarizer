@@ -1,0 +1,401 @@
+/* =========================================
+   Variables & Reset
+   ========================================= */
+   :root {
+    /* Color Palette - Indigo & Violet Gradient */
+    --primary-hue: 245;
+    --primary: hsl(var(--primary-hue), 80%, 60%);
+    --primary-dark: hsl(var(--primary-hue), 80%, 50%);
+    --accent: hsl(270, 80%, 60%);
+    
+    /* Surface Colors */
+    --bg-body: #f8fafc;
+    --surface: #ffffff;
+    --surface-glass: rgba(255, 255, 255, 0.9);
+    
+    /* Text Colors */
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --text-light: #94a3b8;
+    
+    /* Spacing & Borders */
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
+    
+    /* Transition */
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-body);
+    /* Subtle mesh gradient background */
+    background-image: 
+        radial-gradient(at 0% 0%, hsla(253,16%,7%,0) 0, transparent 50%), 
+        radial-gradient(at 50% 0%, hsla(225,39%,30%,0) 0, transparent 50%), 
+        radial-gradient(at 100% 0%, hsla(339,49%,30%,0) 0, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================
+   Layout & Typography
+   ========================================= */
+.app-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px 0;
+}
+
+/* =========================================
+   Header
+   ========================================= */
+.header {
+    text-align: center;
+    padding: 60px 20px 40px;
+    background: linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0) 100%);
+}
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.logo-icon {
+    font-size: 2.5rem;
+    animation: float 6s ease-in-out infinite;
+}
+
+.logo-text {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, var(--primary-dark), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.tagline {
+    color: var(--text-muted);
+    font-size: 1.125rem;
+    font-weight: 400;
+}
+
+/* =========================================
+   Form Section
+   ========================================= */
+.input-section {
+    margin-bottom: 40px;
+}
+
+.form-group {
+    position: relative;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 8px;
+    border: 1px solid rgba(255,255,255,0.5);
+    transition: transform 0.2s var(--ease);
+}
+
+.form-label {
+    position: absolute;
+    top: -28px;
+    left: 12px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.text-input {
+    width: 100%;
+    border: none;
+    resize: vertical;
+    min-height: 200px;
+    padding: 20px;
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text-main);
+    background: #f1f5f9; /* Light gray inside input */
+    transition: all 0.2s var(--ease);
+}
+
+.text-input:focus {
+    outline: none;
+    background: #ffffff;
+    box-shadow: inset 0 0 0 2px var(--primary);
+}
+
+.text-input::placeholder {
+    color: var(--text-light);
+}
+
+.input-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px 12px 4px;
+}
+
+.char-count {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* =========================================
+   Button
+   ========================================= */
+.submit-button {
+    width: 100%;
+    margin-top: 24px;
+    padding: 16px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    transition: all 0.3s var(--ease);
+    position: relative;
+    overflow: hidden;
+}
+
+.submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.5);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+}
+
+.submit-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Button Loader */
+.button-loader {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+    margin-left: 8px;
+}
+
+.submit-button.loading .button-text {
+    display: none;
+}
+
+.submit-button.loading::after {
+    content: "Summarizing...";
+    font-weight: 600;
+}
+
+/* =========================================
+   Result Section
+   ========================================= */
+.result-section {
+    animation: slideUp 0.5s var(--ease) forwards;
+}
+
+.result-card {
+    background: var(--surface-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+    overflow: hidden;
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    background: rgba(248, 250, 252, 0.5);
+}
+
+.result-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Copy Button */
+.copy-button {
+    background: transparent;
+    border: 1px solid rgba(0,0,0,0.1);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.copy-button:hover {
+    background: white;
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.copy-button.copied {
+    background: #ecfdf5;
+    color: #059669;
+    border-color: #059669;
+}
+
+.result-content {
+    padding: 30px 24px;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-main);
+}
+
+.result-footer {
+    padding: 16px 24px;
+    background: #f8fafc;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.summary-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.stat-item strong {
+    color: var(--text-main);
+}
+
+.stat-divider {
+    color: #cbd5e1;
+}
+
+/* =========================================
+   Error Section
+   ========================================= */
+.error-card {
+    background: #fef2f2;
+    border: 1px solid #fee2e2;
+    border-radius: var(--radius-md);
+    padding: 24px;
+    text-align: center;
+    animation: shake 0.4s var(--ease);
+}
+
+.error-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+}
+
+.error-title {
+    color: #991b1b;
+    margin-bottom: 8px;
+}
+
+.error-message {
+    color: #b91c1c;
+}
+
+/* =========================================
+   Footer
+   ========================================= */
+.footer {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-light);
+    font-size: 0.875rem;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+/* =========================================
+   Animations
+   ========================================= */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* =========================================
+   Mobile Responsiveness
+   ========================================= */
+@media (max-width: 600px) {
+    .header { padding: 40px 20px 20px; }
+    .logo-text { font-size: 1.75rem; }
+    .form-group { padding: 4px; }
+    .text-input { padding: 16px; }
+    .summary-stats { 
+        flex-direction: column; 
+        gap: 4px;
+        align-items: flex-start;
+    }
+    .stat-divider { display: none; }
+}
